@@ -1,5 +1,5 @@
-const express       = require("express");
-const bodyparser    = require("body-parser");
+const express = require("express");
+const bodyparser = require("body-parser");
 
 const PORT = process.env.PORT || 3050;
 
@@ -8,25 +8,37 @@ app.use(bodyparser.json());
 
 
 app.get("/", (req, res) => {
-    res.send("Bienvenidos..!");
+    res.send("Bienvenidos ..!");
 });
 
 
 app.get('/cliente/:id', (req, res) => {
+    console.log(req);
+    console.log(req.params);
+    
     const idCliente = req.params.id;
     res.send(`El id del cliente es: ${idCliente}`);
 });
 
+/**
+ * Enviando parametros opcionales en una URL
+*/
+app.get('/lenguaje/:miParametroOpcional?', function (req, res) {
+    const miParametro = req.params.miParametroOpcional || 'Sin parametros';
+    res.send('El parametro opcional es: ' + miParametro);
+});
 
-app.delete('/delete/:id', (req, res) => {
+app.delete('/borrar/:id', (req, res) => {
     //Usando Desestructuracion de objeto para obtener los parametros
     const { id } = req.params;
+    res.send(`El id para procesar es: ${id}`);
+   /*
     const sql = `DELETE FROM customers WHERE id= ${id}`;
-
     connection.query(sql, error => {
         if (error) throw error;
         res.send('Delete customer');
     });
+    */
 });
 
 
@@ -36,9 +48,9 @@ app.get('/articulo/:nombre', (req, res) => {
 });
 
 
-const tranformarNombre = (nombre='', (error) => {
+const tranformarNombre = (nombre = '', (error) => {
     if (error) return res.status(500).send(error);
-   
+
     //El método toUpperCase() no toma ningún parámetro.
     return res.status(200).send(nombre.toUpperCase());
 });
@@ -50,15 +62,15 @@ const tranformarNombre = (nombre='', (error) => {
 */
 
 app.get('/producto/:id/:nombre', (req, res) => {
-    const productoId        = req.params.id;
-    const productoNombre    = req.params.nombre;
+    const productoId = req.params.id;
+    const productoNombre = req.params.nombre;
     res.send(`Producto con ID: ${productoId} y el nombre es: ${productoNombre}`);
 });
 
 
 //Usando Desestructuracion
 app.get('/alumno/:edad/:nombre', (req, res) => {
-    const { edad, nombre} = req.params;
+    const { edad, nombre } = req.params;
 
     res.send(`El alumno  ${nombre} tiene: ${edad} años`);
 });
@@ -66,7 +78,7 @@ app.get('/alumno/:edad/:nombre', (req, res) => {
 
 app.get('/articulo/:nombre/comentarios/:comentario', (req, res) => {
 
-    const { nombre, comentario } =req.params;
+    const { nombre, comentario } = req.params;
     console.log(`El articulo: ${nombre} tiene el siguiente comentario: ${comentario}`);
 });
 
