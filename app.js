@@ -1,5 +1,5 @@
-const express = require("express");
-const bodyparser = require("body-parser");
+const express       = require("express");
+const bodyparser    = require("body-parser");
 
 const PORT = process.env.PORT || 3050;
 
@@ -12,92 +12,65 @@ app.get("/", (req, res) => {
 });
 
 
-/**
- * 🔥 Como acceder a los parámetros de una url en Express.js
-☆ ¿Cómo crear rutas dinámicas en express?
-*/
-/**Extraer parametros de una URL con express */
-
-app.get('/product/:id/:name', (req, res) => {
-    const productId = req.params.id;
-    const productName = req.params.name;
-    res.send(`Product ID is: ${productId} and Product Name is: ${productName}`);
+app.get('/cliente/:id', (req, res) => {
+    const idCliente = req.params.id;
+    res.send(`El id del cliente es: ${idCliente}`);
 });
 
 
-app.get('/user/:id', (req, res) => {
-    const userId = req.params.id;
-    res.send(`User ID is: ${userId}`);
-});
-
-app.get('/articles/:id', (req, res) => {
-
-    const articleId = req.params.id;
-
-    getArticleFromId(articleId, (error, user) => {
-        if(error) return res.status(500).send(error);
-        res.status(200).send(user);
-    });
-});
-
-
-/**
- *  Ejemplo de una ruta dinámica en express usando múltiples parámetros
-    Si deseamos por ejemplo extraer todos los comentarios realizados por un usuario en un articulo,
-    podemos usar múltiples parámetros.
-*/
- app.get('/articles/:articleId/comentarios/:userId',(req, res) => {
-
-    const articleId = req.params.articleId;
-    const userId = req.params.userId;
-
-    leerComentarios(articleId, userId, (error, comments) => {
-        if(error) return res.status(500).send(error);
-        res.status(200).send(comments);
-    });
-});
-
-
-
-//consultar por id
-app.get("/listar/:id", (req, res) =>{
-    const { id } = req.params;
-    const sql = `SELECT * FROM customers WHERE id = ${id}`
-
-    connection.query(sql, (error, results)=>{
-        if (error) throw error;
-        if (results.length > 0){
-            res.json(results);
-        }else {
-            res.send('Not result');
-          }
-    })
-});
-
-
-//actualizar
-app.put('/update/:id', (req, res) => {
-    const { id } = req.params;
-    const { name, city } = req.body;
-    const sql = `UPDATE customers SET name = '${name}', city='${city}' WHERE id =${id}`;
-  
-    connection.query(sql, error => {
-      if (error) throw error;
-      res.send('Customer updated!');
-    });
-  });
-
-  //borrar por id
-  app.delete('/delete/:id', (req, res) => {
+app.delete('/delete/:id', (req, res) => {
+    //Usando Desestructuracion de objeto para obtener los parametros
     const { id } = req.params;
     const sql = `DELETE FROM customers WHERE id= ${id}`;
-  
+
     connection.query(sql, error => {
-      if (error) throw error;
-      res.send('Delete customer');
+        if (error) throw error;
+        res.send('Delete customer');
     });
-  });
-  
+});
+
+
+app.get('/articulo/:nombre', (req, res) => {
+    const nombre = req.params.id;
+    tranformarNombre(nombre);
+});
+
+
+const tranformarNombre = (nombre='', (error) => {
+    if (error) return res.status(500).send(error);
+   
+    //El método toUpperCase() no toma ningún parámetro.
+    return res.status(200).send(nombre.toUpperCase());
+});
+
+
+
+/**
+ * Extraer más de un parámetro
+*/
+
+app.get('/producto/:id/:nombre', (req, res) => {
+    const productoId        = req.params.id;
+    const productoNombre    = req.params.nombre;
+    res.send(`Producto con ID: ${productoId} y el nombre es: ${productoNombre}`);
+});
+
+
+//Usando Desestructuracion
+app.get('/alumno/:edad/:nombre', (req, res) => {
+    const { edad, nombre} = req.params;
+
+    res.send(`El alumno  ${nombre} tiene: ${edad} años`);
+});
+
+
+app.get('/articulo/:nombre/comentarios/:comentario', (req, res) => {
+
+    const { nombre, comentario } =req.params;
+    console.log(`El articulo: ${nombre} tiene el siguiente comentario: ${comentario}`);
+});
+
+
 
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto: ${PORT}`));
 
