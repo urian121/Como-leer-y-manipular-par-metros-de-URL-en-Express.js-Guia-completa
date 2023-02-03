@@ -1,19 +1,20 @@
+// Incluimos el modulo de express
 const express = require("express");
-const bodyparser = require("body-parser");
 
+// Establecemos un puerto en el cual nuestro servidor estará escuchando
 const PORT = process.env.PORT || 3050;
 
+// Creamos la aplicación de express con la función express()
 const app = express();
-app.use(bodyparser.json());
 
 
 app.get("/", (req, res) => {
-    res.send("Bienvenidos ..!");
+    let texto = 'Aprendamos hoy como acceder a los parametros de una URL usando Express!';
+    res.send(`<h1 style='color:#333; text-align:center;'>${texto} <hr></h1>`);
 });
 
 
 app.get('/cliente/:id', (req, res) => {
-    console.log(req);
     console.log(req.params);
     
     const idCliente = req.params.id;
@@ -28,7 +29,7 @@ app.get('/lenguaje/:miParametroOpcional?', function (req, res) {
     res.send('El parametro opcional es: ' + miParametro);
 });
 
-app.delete('/borrar/:id', (req, res) => {
+app.delete('/borrar/:id?', (req, res) => {
     //Usando Desestructuracion de objeto para obtener los parametros
     const { id } = req.params;
     res.send(`El id para procesar es: ${id}`);
@@ -40,21 +41,6 @@ app.delete('/borrar/:id', (req, res) => {
     });
     */
 });
-
-
-app.get('/articulo/:nombre', (req, res) => {
-    const nombre = req.params.id;
-    tranformarNombre(nombre);
-});
-
-
-const tranformarNombre = (nombre = '', (error) => {
-    if (error) return res.status(500).send(error);
-
-    //El método toUpperCase() no toma ningún parámetro.
-    return res.status(200).send(nombre.toUpperCase());
-});
-
 
 
 /**
@@ -69,7 +55,7 @@ app.get('/producto/:id/:nombre', (req, res) => {
 
 
 //Usando Desestructuracion
-app.get('/alumno/:edad/:nombre', (req, res) => {
+app.get('/alumno/:edad/:nombre?', (req, res) => {
     const { edad, nombre } = req.params;
 
     res.send(`El alumno  ${nombre} tiene: ${edad} años`);
@@ -83,8 +69,10 @@ app.get('/articulo/:nombre/comentarios/:comentario', (req, res) => {
 });
 
 
-
-app.listen(PORT, () => console.log(`Servidor corriendo en el puerto: ${PORT}`));
+// Nuestra aplicación estará escuchando en el puerto que definimos previamente
+app.listen(PORT, () => 
+    console.log(`Servidor corriendo en el puerto: ${PORT}`
+));
 
 
 
