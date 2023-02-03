@@ -16,7 +16,6 @@ app.get("/", (req, res) => {
 
 app.get('/cliente/:id', (req, res) => {
     console.log(req.params);
-    
     const idCliente = req.params.id;
     res.send(`El id del cliente es: ${idCliente}`);
 });
@@ -25,7 +24,7 @@ app.get('/cliente/:id', (req, res) => {
  * Enviando parametros opcionales en una URL
 */
 app.get('/lenguaje/:miParametroOpcional?', function (req, res) {
-    const miParametro = req.params.miParametroOpcional || 'Sin parametros';
+    const miParametro = req.params.miParametroOpcional || 'No hay parametros';
     res.send('El parametro opcional es: ' + miParametro);
 });
 
@@ -47,18 +46,20 @@ app.delete('/borrar/:id?', (req, res) => {
  * Extraer más de un parámetro
 */
 
-app.get('/producto/:id/:nombre', (req, res) => {
+app.get('/producto/:id?/:nombre?', (req, res) => {
+    console.log(req.params);
     const productoId = req.params.id;
     const productoNombre = req.params.nombre;
-    res.send(`Producto con ID: ${productoId} y el nombre es: ${productoNombre}`);
+    res.send(`Producto con ID: ${productoId} es un: ${productoNombre}`);
 });
 
 
 //Usando Desestructuracion
-app.get('/alumno/:edad/:nombre?', (req, res) => {
-    const { edad, nombre } = req.params;
+app.get('/alumno/:edad?/:nombre?/:curso?', (req, res) => {
+    console.log(req.params);
+    const { edad, nombre, curso } = req.params;
 
-    res.send(`El alumno  ${nombre} tiene: ${edad} años`);
+    res.send(`El alumno  ${nombre} tiene ${edad} años`);
 });
 
 
